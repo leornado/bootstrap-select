@@ -1,13 +1,14 @@
 {
-  "name": "bootstrap-select",
+  "name": "wnd-bootstrap-select",
   "main": [
     "less/bootstrap-select.less",
     "dist/css/bootstrap-select.css",
     "dist/js/bootstrap-select.js"
   ],
-  "homepage": "http://silviomoreto.github.io/bootstrap-select",
+  "description": "For private use. Please use bootstrap-select instead. Thanks Silvio Moreto and other contributors.",
+  "homepage": "https://github.com/leornado/bootstrap-select.git",
   "authors": [
-    "silviomoreto"
+    "leornado"
   ],
   "keywords": [
     "form",

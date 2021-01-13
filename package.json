@@ -3,7 +3,7 @@
   "title": "wnd-bootstrap-select",
   "main": "dist/js/wnd-bootstrap-select.js",
   "description": "For private use. Please use bootstrap-select instead. Thanks Silvio Moreto and other contributors.",
-  "version": "1.12.401",
+  "version": "1.12.402",
   "homepage": "https://github.com/leornado/bootstrap-select.git",
   "repository": {
     "type": "git",

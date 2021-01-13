@@ -1,15 +1,17 @@
 {
-  "curly": true,
-  "eqeqeq": true,
+  "curly": false,
+  "eqeqeq": false,
   "immed": true,
   "latedef": true,
   "newcap": true,
   "noarg": true,
   "sub": true,
   "undef": true,
-  "unused": true,
+  "unused": false,
   "boss": true,
   "eqnull": true,
   "browser": true,
-  "jquery": true
+  "jquery": true,
+  "node": true,
+  "strict": false
 }

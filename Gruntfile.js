@@ -11,18 +11,19 @@ module.exports = function (grunt) {
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*!\n' +
-    ' * Bootstrap-select v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
-    ' *\n' +
-    ' * Copyright 2013-<%= grunt.template.today(\'yyyy\') %> bootstrap-select\n' +
-    ' * Licensed under <%= pkg.license %> (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)\n' +
-    ' */\n',
+      ' * Bootstrap-select v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
+      ' *\n' +
+      ' * Copyright 2013-<%= grunt.template.today(\'yyyy\') %> bootstrap-select\n' +
+      ' * Licensed under <%= pkg.license %> (https://github.com/leornado/bootstrap-select/tree/master/LICENSE)\n' +
+      ' */\n',
 
     // Task configuration.
 
     clean: {
       css: 'dist/css',
       js: 'dist/js',
-      docs: 'docs/docs/dist'
+      docs: 'docs/docs/dist',
+      tmp: 'dist/css/bootstrap-select-iconfont.css'
     },
 
     jshint: {
@@ -47,14 +48,41 @@ module.exports = function (grunt) {
       options: {
         stripBanners: true
       },
-      main: {
-        src: '<%= jshint.main.src %>',
-        dest: 'dist/js/<%= pkg.name %>.js'
+      js: {
+        files: [{ // main
+          src : '<%= jshint.main.src %>',
+          dest: 'dist/js/bootstrap-select.js'
+        }, { // i18n
+          expand: true,
+          src   : '<%= jshint.i18n.src %>',
+          dest  : 'dist/'
+        }]
       },
-      i18n: {
-        expand: true,
-        src: '<%= jshint.i18n.src %>',
-        dest: 'dist/'
+      css: {
+        files: [{ // iconfont
+          src : ['<%= less.css.dest %>', 'dist/css/bootstrap-select-iconfont.css'],
+          dest: '<%= less.css.dest %>'
+        }]
+      }
+    },
+
+    replace: {
+      css: {
+        options: {
+          patterns: [{
+            match      : /iconfont/g,
+            replacement: 'bootstrap-select-iconfont'
+          }]
+        },
+        files  : [{
+          expand: true,
+          cwd   : 'resources/css/iconfont/',
+          src   : ['iconfont.css'],
+          dest: 'dist/css/',
+          rename: function (dest, src) {
+            return dest + 'bootstrap-select-iconfont' +  src.substring(src.lastIndexOf('.'));
+          }
+        }]
       }
     },
 
@@ -68,7 +96,7 @@ module.exports = function (grunt) {
             global: ['jQuery']
           }
         },
-        src: '<%= concat.main.dest %>'
+        src: '<%= concat.js.files[0].dest %>'
       },
       i18n: {
         options: {
@@ -91,11 +119,11 @@ module.exports = function (grunt) {
         }
       },
       main: {
-        src: '<%= concat.main.dest %>',
-        dest: 'dist/js/<%= pkg.name %>.min.js',
+        src: '<%= concat.js.files[0].dest %>',
+        dest: 'dist/js/bootstrap-select.min.js',
         options: {
           sourceMap: true,
-          sourceMapName: 'dist/js/<%= pkg.name %>.js.map'
+          sourceMapName: 'dist/js/bootstrap-select.js.map'
         }
       },
       i18n: {
@@ -110,12 +138,12 @@ module.exports = function (grunt) {
         strictMath: true,
         sourceMap: true,
         outputSourceFiles: true,
-        sourceMapURL: '<%= pkg.name %>.css.map',
+        sourceMapURL: 'bootstrap-select.css.map',
         sourceMapFilename: '<%= less.css.dest %>.map'
       },
       css: {
         src: 'less/bootstrap-select.less',
-        dest: 'dist/css/<%= pkg.name %>.css'
+        dest: 'dist/css/bootstrap-select.css'
       }
     },
 
@@ -131,7 +159,7 @@ module.exports = function (grunt) {
           banner: '<%= banner %>'
         },
         src: [
-          '<%= concat.main.dest %>',
+          '<%= concat.js.files[0].dest %>',
           '<%= uglify.main.dest %>',
           'dist/<%= jshint.i18n.src %>',
         ]
@@ -146,6 +174,15 @@ module.exports = function (grunt) {
           '**/*'
         ],
         dest: 'docs/docs/dist/'
+      },
+      iconfont: {
+        expand: true,
+        cwd: 'resources/css/iconfont/',
+        src   : ['*.{eot,svg,ttf,woff,woff2}'],
+        dest  : 'dist/css/',
+        rename: function (dest, src) {
+          return dest + 'bootstrap-select-iconfont' + src.substring(src.lastIndexOf('.'));
+        }
       }
     },
 
@@ -157,7 +194,7 @@ module.exports = function (grunt) {
       },
       css: {
         src: '<%= less.css.dest %>',
-        dest: 'dist/css/<%= pkg.name %>.min.css'
+        dest: 'dist/css/bootstrap-select.min.css'
       }
     },
 
@@ -193,12 +230,12 @@ module.exports = function (grunt) {
           prefix: 'Selectpicker.VERSION = \''
         },
         src: [
-          'js/<%= pkg.name %>.js'
+          'js/bootstrap-select.js'
         ],
       },
       cdn: {
         options: {
-          prefix: 'ajax/libs/<%= pkg.name %>/'
+          prefix: 'ajax/libs/bootstrap-select/'
         },
         src: [
           'README.md',
@@ -291,10 +328,11 @@ module.exports = function (grunt) {
   // to update version number, use grunt version::x.y.z
 
   // CSS distribution
-  grunt.registerTask('build-css', ['clean:css', 'less', 'autoprefixer', 'usebanner:css', 'cssmin']);
+  grunt.registerTask('build-css',
+    ['clean:css', 'replace:css', 'less', 'autoprefixer', 'concat:css', 'usebanner:css', 'cssmin', 'copy:iconfont', 'clean:tmp']);
 
   // JS distribution
-  grunt.registerTask('build-js', ['clean:js', 'concat', 'umd', 'usebanner:js', 'uglify']);
+  grunt.registerTask('build-js', ['clean:js', 'concat:js', 'umd', 'usebanner:js', 'uglify']);
 
   // Copy dist to docs
   grunt.registerTask('docs', ['clean:docs', 'copy:docs']);

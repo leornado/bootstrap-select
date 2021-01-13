@@ -5,7 +5,7 @@
 
   <meta charset="utf-8">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="dist/css/bootstrap-select.css">
 
   <style>
@@ -14,8 +14,8 @@
     }
   </style>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://lib.baomitu.com/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://lib.baomitu.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="dist/js/bootstrap-select.js"></script>
 </head>
 <body>
@@ -34,6 +34,7 @@
 
       <div class="col-lg-10">
         <select id="basic" class="selectpicker show-tick form-control">
+          <option value="">无</option>
           <option>cow</option>
           <option data-subtext="option subtext">bull</option>
           <option class="get-class" disabled>ox</option>
@@ -51,16 +52,16 @@
 
   <form class="form-horizontal" role="form">
     <div class="form-group">
-      <label for="basic" class="col-lg-2 control-label">"Basic" (liveSearch enabled)</label>
+      <label for="basic3" class="col-lg-2 control-label">"Basic" (liveSearch enabled)</label>
 
       <div class="col-lg-10">
-        <select id="basic" class="selectpicker show-tick form-control" data-live-search="true">
+        <select id="basic3" class="selectpicker show-tick form-control" data-live-search="true">
           <option>cow</option>
           <option data-subtext="option subtext">bull</option>
           <option class="get-class" disabled>ox</option>
           <optgroup label="test" data-subtext="optgroup subtext">
             <option>ASD</option>
-            <option selected>Bla</option>
+            <option>Bla</option>
             <option>Ble</option>
           </optgroup>
         </select>
@@ -314,6 +315,16 @@
       liveSearch: true,
       maxOptions: 1
     });
+
+    $('#basic').selectpicker({
+      enableCaretClearer: false,
+      hasAnySelected: function (val) {
+        return !!val;
+      }
+    });
+    setTimeout(function() {
+      $('#basic').selectpicker('toggleClearer');
+    }, 2000)
   });
 </script>
 </body>

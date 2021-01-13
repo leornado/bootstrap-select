@@ -24,6 +24,36 @@ select.selectpicker {
     &.bs-placeholder:hover,
     &.bs-placeholder:focus,
     &.bs-placeholder:active { color: @input-color-placeholder; }
+
+    .bs-caret .caret {
+      .bs-clearer {
+        position: absolute;
+        right: -4px;
+        top: -9px;
+        opacity: .4;
+        display: none;
+
+        &:hover {
+          opacity: .9;
+        }
+      }
+    }
+  }
+
+  &.bs-selected > .dropdown-toggle {
+    &:hover {
+      .bs-caret .caret {
+        border-width: 0;
+
+        .bs-clearer {
+          display: block;
+
+          &.hide-clearer {
+            display: none;
+          }
+        }
+      }
+    }
   }
 
   > select {

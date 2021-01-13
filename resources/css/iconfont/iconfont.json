@@ -1,0 +1,16 @@
+{
+  "id": "2323872",
+  "name": "wnd-bootstrap-select",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "866245",
+      "name": "交叉_cross78",
+      "font_class": "jiaochacross78",
+      "unicode": "e922",
+      "unicode_decimal": 59682
+    }
+  ]
+}

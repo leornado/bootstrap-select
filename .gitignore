@@ -6,8 +6,11 @@
 node_modules
 bower_components
 .sass-cache
+local-dev
 
 # Dist zip
 bootstrap-select-*.zip
 
 docs/site
+
+package-lock.json

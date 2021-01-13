@@ -1,8 +1,8 @@
 /*!
- * Bootstrap-select v1.12.4 (http://silviomoreto.github.io/bootstrap-select)
+ * Bootstrap-select v1.12.401 (https://github.com/leornado/bootstrap-select.git)
  *
- * Copyright 2013-2017 bootstrap-select
- * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
+ * Copyright 2013-2021 bootstrap-select
+ * Licensed under MIT (https://github.com/leornado/bootstrap-select/tree/master/LICENSE)
  */
 
 select.bs-select-hidden,
@@ -23,6 +23,25 @@ select.selectpicker {
 .bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
 .bootstrap-select > .dropdown-toggle.bs-placeholder:active {
   color: #999;
+}
+.bootstrap-select > .dropdown-toggle .bs-caret .caret .bs-clearer {
+  position: absolute;
+  right: -4px;
+  top: -9px;
+  opacity: .4;
+  display: none;
+}
+.bootstrap-select > .dropdown-toggle .bs-caret .caret .bs-clearer:hover {
+  opacity: .9;
+}
+.bootstrap-select.bs-selected > .dropdown-toggle:hover .bs-caret .caret {
+  border-width: 0;
+}
+.bootstrap-select.bs-selected > .dropdown-toggle:hover .bs-caret .caret .bs-clearer {
+  display: block;
+}
+.bootstrap-select.bs-selected > .dropdown-toggle:hover .bs-caret .caret .bs-clearer.hide-clearer {
+  display: none;
 }
 .bootstrap-select > select {
   position: absolute !important;
@@ -298,3 +317,24 @@ select.selectpicker {
   float: none;
 }
 /*# sourceMappingURL=bootstrap-select.css.map */
+@font-face {font-family: "bootstrap-select-iconfont";
+  src: url('bootstrap-select-iconfont.eot?t=1610451620788'); /* IE9 */
+  src: url('bootstrap-select-iconfont.eot?t=1610451620788#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAKkAAsAAAAABlgAAAJZAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcApcfQE2AiQDCAsGAAQgBYRtBzgbqwUR1Ytbsj9AGWM7qAUiZs91eMI3Nuwk/6ZNAFcGfwHzwLWgAAAAAIB4iPb735ndue/vV0PEu2gTTWQSiaqSoGQPkZA8S9dIvpdzZpMx6oUq0fnWj3zg0/I3MMoJHtE0kWVuAFNZbb1wR+rsf29tK27gHSdY2svCf1jHaQEPecRXDxmlWQsABQ6nXaBA7kDK7Z7D51IcWBroP9gnK5LIG8YueIHnCYxYY5c44QKiSfa0QFzvO0Qr+KVkqSYMGtameKnTyvMy8yL6fvzJolF0lV1x7tp8iyO/ciej3uvN1YAgQECbO1TsQhKXGuNnVMFo1Qhn2oCUoV9532OjOKpOsL/OLh4DqyD/mQSe8FGLC8hkcAl7Jz2GMjZ280DOgfcY4880IHeALcF4mOzfP+tLkvakZdZVb3d5hX/HEdBfrQSCb9Y33f9Ggu/F6yJvfzLMSdulI/g1goFtaYhsQ0lN0OgsliZNLRgxgh7snvFzqnr+PtKhmb8b55DVGapmEzGpu9AZdQgDzWGM2On05lGzbqgih7HDY4Aw5T2KCR9QTflITOoPdBb8w8BUVIy4EvYctSXEOA5FQA3yD7Oiw7imwOPSG47vTbi8KKK/0Pk5BGmUlFMDHuiWWOA/YxaCAeNohx5chttGcDpaUIVoCuHs4tg0vSlStDPOJocioAb5h1nRYYL+gVc+f8PxvQnXUVXnfqHz8/CQRskA4iA/BlU9yjX+M2YhGDCOdujBKNw2grN51IIqRNOE6NnFTjczVB5tr9x/II/VYWuuF+eYKltmQWoSypH3dcMYAA==') format('woff2'),
+  url('bootstrap-select-iconfont.woff?t=1610451620788') format('woff'),
+  url('bootstrap-select-iconfont.ttf?t=1610451620788') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('bootstrap-select-iconfont.svg?t=1610451620788#bootstrap-select-iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.bootstrap-select-iconfont {
+  font-family: "bootstrap-select-iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiaochacross78:before {
+  content: "\e922";
+}
+

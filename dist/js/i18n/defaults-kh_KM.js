@@ -1,8 +1,8 @@
 /*!
- * Bootstrap-select v1.12.4 (http://silviomoreto.github.io/bootstrap-select)
+ * Bootstrap-select v1.12.401 (https://github.com/leornado/bootstrap-select.git)
  *
- * Copyright 2013-2017 bootstrap-select
- * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
+ * Copyright 2013-2021 bootstrap-select
+ * Licensed under MIT (https://github.com/leornado/bootstrap-select/tree/master/LICENSE)
  */
 
 (function (root, factory) {

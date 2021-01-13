@@ -4,6 +4,7 @@
   //<editor-fold desc="Shims">
   if (!String.prototype.includes) {
     (function () {
+      /* jshint -W034 */
       'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
       var toString = {}.toString;
       var defineProperty = (function () {
@@ -12,9 +13,9 @@
           var object = {};
           var $defineProperty = Object.defineProperty;
           var result = $defineProperty(object, object, object) && $defineProperty;
+          return result;
         } catch (error) {
         }
-        return result;
       }());
       var indexOf = ''.indexOf;
       var includes = function (search) {
@@ -55,6 +56,7 @@
 
   if (!String.prototype.startsWith) {
     (function () {
+      /* jshint -W034 */
       'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
       var defineProperty = (function () {
         // IE 8 only supports `Object.defineProperty` on DOM elements
@@ -62,9 +64,9 @@
           var object = {};
           var $defineProperty = Object.defineProperty;
           var result = $defineProperty(object, object, object) && $defineProperty;
+          return result;
         } catch (error) {
         }
-        return result;
       }());
       var toString = {}.toString;
       var startsWith = function (search) {
@@ -119,7 +121,8 @@
       r=[];
       // iterate over object keys
       for (k in o)
-          // fill result array with non-prototypical keys
+        // fill result array with non-prototypical keys
+        /* jshint -W030 */
         r.hasOwnProperty.call(o, k) && r.push(k);
       // return result
       return r;
@@ -151,11 +154,13 @@
     }
   })();
 
-  $.fn.triggerNative = function (eventName) {
+  $.fn.triggerNative = function (eventName, bs) {
     var el = this[0],
         event;
 
-    if (el.dispatchEvent) { // for modern browsers & IE9+
+    if(eventName === 'change') bs.refreshSelectedClass();
+
+    if (el.dispatchEvent && navigator.userAgent.indexOf('MSIE 8.0') < 0) { // for modern browsers & IE9+
       if (EventIsSupported) {
         // For modern browsers
         event = new Event(eventName, {
@@ -262,8 +267,8 @@
     };
     // Regexes for identifying a key that needs to be escaped.
     var source = '(?:' + Object.keys(map).join('|') + ')';
-    var testRegexp = RegExp(source);
-    var replaceRegexp = RegExp(source, 'g');
+    var testRegexp = new RegExp(source);
+    var replaceRegexp = new RegExp(source, 'g');
     return function(string) {
       string = string == null ? '' : '' + string;
       return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
@@ -346,6 +351,7 @@
     showIcon: true,
     showContent: true,
     dropupAuto: true,
+    enableCaretClearer: true,
     header: false,
     liveSearch: false,
     liveSearchPlaceholder: null,
@@ -356,7 +362,7 @@
     tickIcon: 'glyphicon-ok',
     showTick: false,
     template: {
-      caret: '<span class="caret"></span>'
+      caret: '<span class="caret"><span class="bs-clearer"><span class="clear-handler icon-jiaochacross78 bootstrap-select-iconfont"></span></span></span>',
     },
     maxOptions: false,
     mobile: false,
@@ -384,7 +390,7 @@
       this.$element
         .after(this.$newElement)
         .appendTo(this.$newElement);
-      this.$button = this.$newElement.children('button');
+      this.$button = this.$newElement.children('div.button');
       this.$menu = this.$newElement.children('.dropdown-menu');
       this.$menuInner = this.$menu.children('.inner');
       this.$searchbox = this.$menu.find('input');
@@ -411,6 +417,7 @@
       this.$menu.data('this', this);
       this.$newElement.data('this', this);
       if (this.options.mobile) this.mobile();
+      if (!this.options.enableCaretClearer) this.toggleClearer(false);
 
       this.$newElement.on({
         'hide.bs.dropdown': function (e) {
@@ -469,7 +476,7 @@
           inputGroup = this.$element.parent().hasClass('input-group') ? ' input-group-btn' : '',
           autofocus = this.autofocus ? ' autofocus' : '';
       // Elements
-      var header = this.options.header ? '<div class="popover-title"><button type="button" class="close" aria-hidden="true">&times;</button>' + this.options.header + '</div>' : '';
+      var header = this.options.header ? '<div class="popover-title"><button class="close" aria-hidden="true">&times;</button>' + this.options.header + '</div>' : '';
       var searchbox = this.options.liveSearch ?
       '<div class="bs-searchbox">' +
       '<input type="text" class="form-control" autocomplete="off"' +
@@ -499,12 +506,12 @@
           : '';
       var drop =
           '<div class="btn-group bootstrap-select' + showTick + inputGroup + '">' +
-          '<button type="button" class="' + this.options.styleBase + ' dropdown-toggle" data-toggle="dropdown"' + autofocus + ' role="button">' +
+          '<div class="button ' + this.options.styleBase + ' dropdown-toggle" data-toggle="dropdown"' + autofocus + ' role="button">' +
           '<span class="filter-option pull-left"></span>&nbsp;' +
           '<span class="bs-caret">' +
           this.options.template.caret +
           '</span>' +
-          '</button>' +
+          '</div>' +
           '<div class="dropdown-menu open" role="combobox">' +
           header +
           searchbox +
@@ -804,6 +811,20 @@
       this.$button.children('.filter-option').html(title);
 
       this.$element.trigger('rendered.bs.select');
+      this.refreshSelectedClass();
+    },
+
+    refreshSelectedClass: function () {
+      var val = this.$element.val(), hasAnySelected;
+
+      if (this && this.options.hasAnySelected) {
+        hasAnySelected = this.options.hasAnySelected.apply(this, [val]) === true;
+      } else {
+        /* jshint -W014 */
+        hasAnySelected = !(val === undefined || val === null || typeof val === 'string' && $.trim(val) === ''
+            || typeof val === 'object' && val.constructor === Array && val.length === 0);
+      }
+      this.$newElement.toggleClass('bs-selected', hasAnySelected);
     },
 
     /**
@@ -894,7 +915,7 @@
             horiz: menuPadding.horiz +
                   parseInt(menuStyle ? menuStyle.marginLeft : $menu.css('marginLeft')) +
                   parseInt(menuStyle ? menuStyle.marginRight : $menu.css('marginRight')) + 2
-          }
+          };
 
       document.body.removeChild(newElement);
 
@@ -1064,7 +1085,7 @@
         var $selectClone = this.$menu.parent().clone().appendTo('body'),
             $selectClone2 = this.options.container ? this.$newElement.clone().appendTo('body') : $selectClone,
             ulWidth = $selectClone.children('.dropdown-menu').outerWidth(),
-            btnWidth = $selectClone2.css('width', 'auto').children('button').outerWidth();
+            btnWidth = $selectClone2.css('width', 'auto').children('div.button').outerWidth();
 
         $selectClone.remove();
         $selectClone2.remove();
@@ -1229,7 +1250,7 @@
         }
       });
 
-      this.$button.on('click', function () {
+      this.$button.on('click', function (e) {
         that.setSize();
       });
 
@@ -1350,7 +1371,7 @@
               // $option.prop('selected') is current option state (selected/unselected). state is previous option state.
               changed_arguments = [clickedIndex, $option.prop('selected'), state];
               that.$element
-                .triggerNative('change');
+                .triggerNative('change', that);
             }
           }
         }
@@ -1384,6 +1405,18 @@
 
       this.$searchbox.on('click', function (e) {
         e.stopPropagation();
+      });
+
+      this.$newElement.on('click', '.bs-clearer', function (e) {
+        if (!that.options.enableCaretClearer) return;
+        e.stopPropagation();
+
+        if (that.multiple) that.deselectAll();
+        else {
+          that.$element.find('option').prop('selected', false);
+          that.render();
+          that.$element.triggerNative('change', that);
+        }
       });
 
       this.$menu.on('click', '.actions-btn', function (e) {
@@ -1532,7 +1565,7 @@
       this.togglePlaceholder();
 
       this.$element
-        .triggerNative('change');
+        .triggerNative('change', this);
     },
 
     selectAll: function () {
@@ -1726,6 +1759,12 @@
       this.$element.addClass('mobile-device');
     },
 
+    toggleClearer: function(enable) {
+      if (enable === undefined) enable = !this.options.enableCaretClearer;
+      this.options.enableCaretClearer = enable;
+      this.$newElement.find('.dropdown-toggle .bs-clearer').toggleClass('hide-clearer', !enable);
+    },
+
     refresh: function () {
       this.$lis = null;
       this.liObj = {};
@@ -1841,6 +1880,6 @@
     $('.selectpicker').each(function () {
       var $selectpicker = $(this);
       Plugin.call($selectpicker, $selectpicker.data());
-    })
+    });
   });
 })(jQuery);
